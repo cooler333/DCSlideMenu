@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
-        <!--Detail View Controller-->
+        <!--Container View Controller-->
         <scene sceneID="5qT-D9-KRM">
             <objects>
-                <viewController id="EF5-Qc-bjG" customClass="DCDetailViewController" sceneMemberID="viewController">
+                <viewController id="EF5-Qc-bjG" customClass="DCContainerViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Glc-Xj-qzO">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -72,10 +72,10 @@
             </objects>
             <point key="canvasLocation" x="86" y="21"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Menu View Controller-->
         <scene sceneID="uWA-Cr-44p">
             <objects>
-                <tableViewController id="Sli-Z8-xN6" customClass="DCTableViewController" sceneMemberID="viewController">
+                <tableViewController id="Sli-Z8-xN6" customClass="DCMenuViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9af-nY-jHe">
                         <rect key="frame" x="0.0" y="20" width="320" height="528"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -450,8 +450,8 @@
         </scene>
     </scenes>
     <classes>
-        <class className="DCDetailViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DCDetailViewController.h"/>
+        <class className="DCContainerViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DCContainerViewController.h"/>
             <relationships>
                 <relationship kind="action" name="moving:" candidateClass="UIPanGestureRecognizer"/>
                 <relationship kind="action" name="tapOnFrontView:" candidateClass="UITapGestureRecognizer"/>
@@ -460,14 +460,14 @@
                 <relationship kind="outlet" name="menuContainerView" candidateClass="UIView"/>
             </relationships>
         </class>
+        <class className="DCMenuViewController" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DCMenuViewController.h"/>
+        </class>
         <class className="DCNavigationController" superclassName="UINavigationController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DCNavigationController.h"/>
         </class>
         <class className="DCOtherTableViewController" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DCOtherTableViewController.h"/>
-        </class>
-        <class className="DCTableViewController" superclassName="UITableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/DCTableViewController.h"/>
         </class>
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>

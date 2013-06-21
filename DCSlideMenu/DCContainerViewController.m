@@ -7,14 +7,14 @@
 //
 
 
-#import "DCDetailViewController.h"
+#import "DCContainerViewController.h"
 
 
 static CGFloat rightEdge = 440.0f; // 440 - 160 = 280
 static CGFloat centerEdge = 300.0f;
 
 
-@implementation DCDetailViewController
+@implementation DCContainerViewController
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -139,7 +139,6 @@ static CGFloat centerEdge = 300.0f;
     if ([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateBegan) {
         NSLog(@"BEGAN");
         [frontView setUserInteractionEnabled:YES];
-        [frontView setBackgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.3f]];
         firstX = [containerView center].x;
         firstY = [containerView center].y;
     }
@@ -155,7 +154,6 @@ static CGFloat centerEdge = 300.0f;
     
     if ([sender state] == UIGestureRecognizerStateEnded) {
         [frontView setUserInteractionEnabled:NO];
-        [frontView setBackgroundColor:[UIColor clearColor]];
         
         CGFloat xPoints = 320.0f;
         CGFloat velocity = [sender velocityInView:self.view].x;

@@ -10,6 +10,6 @@
 #import <UIKit/UIKit.h>
 
 
-@interface DCTableViewController : UITableViewController
+@interface DCMenuViewController : UITableViewController
 
 @end

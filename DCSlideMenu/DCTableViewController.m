@@ -7,9 +7,9 @@
 //
 
 
-#import "DCTableViewController.h"
+#import "DCMenuViewController.h"
 
 
-@implementation DCTableViewController
+@implementation DCMenuViewController
 
 @end

@@ -9,17 +9,17 @@
 
 #import <UIKit/UIKit.h>
 #import "DCNavigationController.h"
-#import "DCTableViewController.h"
+#import "DCMenuViewController.h"
 
 
-@interface DCDetailViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDelegate, UINavigationControllerDelegate> {
+@interface DCContainerViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDelegate, UINavigationControllerDelegate> {
     
     __weak IBOutlet UIView *menuContainerView;
     __weak IBOutlet UIView *containerView;
     __weak IBOutlet UIView *frontView;
     
     DCNavigationController *containerController;
-    DCTableViewController *menuController;
+    DCMenuViewController *menuController;
     
     NSMutableArray *_viewControllersArray;
     NSIndexPath *currentIndexPath;

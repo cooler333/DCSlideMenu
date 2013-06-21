@@ -17,7 +17,7 @@
 		84C16C7317740E4B001A0C53 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84C16C7217740E4B001A0C53 /* Default@2x.png */; };
 		84C16C7517740E4B001A0C53 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84C16C7417740E4B001A0C53 /* Default-568h@2x.png */; };
 		84C16C7C17740EA8001A0C53 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84C16C7B17740EA8001A0C53 /* Storyboard.storyboard */; };
-		84C16C8417740FA8001A0C53 /* DCDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C16C7F17740FA8001A0C53 /* DCDetailViewController.m */; };
+		84C16C8417740FA8001A0C53 /* DCContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C16C7F17740FA8001A0C53 /* DCContainerViewController.m */; };
 		84C16C8517740FA8001A0C53 /* DCNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C16C8117740FA8001A0C53 /* DCNavigationController.m */; };
 		84C16C8617740FA8001A0C53 /* DCTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C16C8317740FA8001A0C53 /* DCTableViewController.m */; };
 		84C16C891774129A001A0C53 /* DCOtherTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C16C881774129A001A0C53 /* DCOtherTableViewController.m */; };
@@ -38,11 +38,11 @@
 		84C16C7217740E4B001A0C53 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		84C16C7417740E4B001A0C53 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		84C16C7B17740EA8001A0C53 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Storyboard.storyboard; sourceTree = "<group>"; };
-		84C16C7E17740FA8001A0C53 /* DCDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCDetailViewController.h; sourceTree = "<group>"; };
-		84C16C7F17740FA8001A0C53 /* DCDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCDetailViewController.m; sourceTree = "<group>"; };
+		84C16C7E17740FA8001A0C53 /* DCContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCContainerViewController.h; sourceTree = "<group>"; };
+		84C16C7F17740FA8001A0C53 /* DCContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCContainerViewController.m; sourceTree = "<group>"; };
 		84C16C8017740FA8001A0C53 /* DCNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCNavigationController.h; sourceTree = "<group>"; };
 		84C16C8117740FA8001A0C53 /* DCNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCNavigationController.m; sourceTree = "<group>"; };
-		84C16C8217740FA8001A0C53 /* DCTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTableViewController.h; sourceTree = "<group>"; };
+		84C16C8217740FA8001A0C53 /* DCMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCMenuViewController.h; sourceTree = "<group>"; };
 		84C16C8317740FA8001A0C53 /* DCTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTableViewController.m; sourceTree = "<group>"; };
 		84C16C871774129A001A0C53 /* DCOtherTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCOtherTableViewController.h; sourceTree = "<group>"; };
 		84C16C881774129A001A0C53 /* DCOtherTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCOtherTableViewController.m; sourceTree = "<group>"; };
@@ -93,11 +93,11 @@
 			isa = PBXGroup;
 			children = (
 				84C16C7B17740EA8001A0C53 /* Storyboard.storyboard */,
-				84C16C7E17740FA8001A0C53 /* DCDetailViewController.h */,
-				84C16C7F17740FA8001A0C53 /* DCDetailViewController.m */,
+				84C16C7E17740FA8001A0C53 /* DCContainerViewController.h */,
+				84C16C7F17740FA8001A0C53 /* DCContainerViewController.m */,
 				84C16C8017740FA8001A0C53 /* DCNavigationController.h */,
 				84C16C8117740FA8001A0C53 /* DCNavigationController.m */,
-				84C16C8217740FA8001A0C53 /* DCTableViewController.h */,
+				84C16C8217740FA8001A0C53 /* DCMenuViewController.h */,
 				84C16C8317740FA8001A0C53 /* DCTableViewController.m */,
 				84C16C7D17740EB2001A0C53 /* App Delegate */,
 				84C16C6517740E4A001A0C53 /* Supporting Files */,
@@ -199,7 +199,7 @@
 			files = (
 				84C16C6B17740E4A001A0C53 /* main.m in Sources */,
 				84C16C6F17740E4B001A0C53 /* DCAppDelegate.m in Sources */,
-				84C16C8417740FA8001A0C53 /* DCDetailViewController.m in Sources */,
+				84C16C8417740FA8001A0C53 /* DCContainerViewController.m in Sources */,
 				84C16C8517740FA8001A0C53 /* DCNavigationController.m in Sources */,
 				84C16C8617740FA8001A0C53 /* DCTableViewController.m in Sources */,
 				84C16C891774129A001A0C53 /* DCOtherTableViewController.m in Sources */,
