@@ -10,15 +10,6 @@
 #import "DCTableViewController.h"
 
 
-@interface DCTableViewController ()
-
-@end
-
-
 @implementation DCTableViewController
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
 
 @end

@@ -25,33 +25,71 @@ static CGFloat centerEdge = 300.0f;
     NSLog(@"DETAIL VIEW LOAD");
 }
 
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    NSLog(@"WILL SHOW: %@", viewController.navigationItem.title);
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    NSLog(@"DID SHOW: %@", viewController.navigationItem.title);
+    
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger currentIndex = [self currentIndex:indexPath];
+    NSLog(@"didDeselectRowAtIndexPath currentIndex: %i", currentIndex);
+    [_viewControllersArray replaceObjectAtIndex:currentIndex withObject:[containerController viewControllers]];
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"DCLOG SECTION: %i _ ROW: %i", indexPath.section, indexPath.row);
+    NSLog(@"DCLOG SECTION: %i, ROW: %i", indexPath.section, indexPath.row);
     
+    if (currentIndexPath != indexPath) {
+        //Back up current stack
+        NSUInteger row = [[_viewControllersArray objectAtIndex:[self currentIndex:indexPath]] count];
+        if (!row) {
+            [self initialViewControllers:indexPath];
+        }
+        NSArray *currentViewControllersArray = [_viewControllersArray objectAtIndex:[self currentIndex:indexPath]];
+        [containerController setViewControllers:currentViewControllersArray];
+        
+        currentIndexPath = indexPath;
+    }
+    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(toggleMenu:)];
+    [[[[containerController viewControllers] objectAtIndex:0] navigationItem] setLeftBarButtonItem:menuButton];
+    [self closeMenu];
+}
+
+- (NSUInteger)currentIndex:(NSIndexPath *)indexPath {
+    NSLog(@"INDEXPATH: %@", indexPath);
+    NSUInteger currentIndex = 0;
+    for(NSInteger i = 0 ; i <= indexPath.section-1 ; i++) {
+       NSUInteger numberOfRowInSection = [menuController.tableView numberOfRowsInSection:i];
+        currentIndex = currentIndex + numberOfRowInSection;;
+    }
+    currentIndex = currentIndex + indexPath.row;
+    NSLog(@"currentIndex: %i", currentIndex);
+
+    return currentIndex;
+}
+
+- (void)initialViewControllers:(NSIndexPath *)indexPath {
     
-    NSMutableArray *viewControllersArray;
+    UIViewController *viewController;
     switch (indexPath.section) {
         case 0: {
             switch (indexPath.row) {
                 case 0: {
-                    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"first"];
-                    viewControllersArray = [NSMutableArray arrayWithArray:@[viewController]];
-                    [containerController setViewControllers:viewControllersArray];
+                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"first"];
                     break;
                 }
                     
                 case 1: {
-                    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"second"];
-                    viewControllersArray = [NSMutableArray arrayWithArray:@[viewController]];
-                    [containerController setViewControllers:viewControllersArray];
+                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"second"];
                     break;
                 }
                     
                 case 2: {
-                    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"third"];
-                    viewControllersArray = [NSMutableArray arrayWithArray:@[viewController]];
-                    [containerController setViewControllers:viewControllersArray];
+                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"third"];
                     break;
                 }
                 default:
@@ -63,23 +101,17 @@ static CGFloat centerEdge = 300.0f;
         default: {
             switch (indexPath.row) {
                 case 0: {
-                    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"first"];
-                    viewControllersArray = [NSMutableArray arrayWithArray:@[viewController]];
-                    [containerController setViewControllers:viewControllersArray];
+                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"first"];
                     break;
                 }
                     
                 case 1: {
-                    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"second"];
-                    viewControllersArray = [NSMutableArray arrayWithArray:@[viewController]];
-                    [containerController setViewControllers:viewControllersArray];
+                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"second"];
                     break;
                 }
                     
                 case 2: {
-                    UIViewController *viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"third"];
-                    viewControllersArray = [NSMutableArray arrayWithArray:@[viewController]];
-                    [containerController setViewControllers:viewControllersArray];
+                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"third"];
                     break;
                 }
                 default:
@@ -88,9 +120,7 @@ static CGFloat centerEdge = 300.0f;
             break;
         }
     }
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(toggleMenu:)];
-    [[[containerController topViewController] navigationItem] setLeftBarButtonItem:menuButton];
-    [self closeMenu];
+    [[_viewControllersArray objectAtIndex:[self currentIndex:indexPath]] addObject:viewController];
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(id)gestureRecognizer {
@@ -103,11 +133,13 @@ static CGFloat centerEdge = 300.0f;
     } else return YES;
     
 }
+
 - (IBAction)moving:(UIPanGestureRecognizer *)sender {
     CGPoint translatedPoint = [sender translationInView:self.view];
     if ([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateBegan) {
         NSLog(@"BEGAN");
         [frontView setUserInteractionEnabled:YES];
+        [frontView setBackgroundColor:[UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.3f]];
         firstX = [containerView center].x;
         firstY = [containerView center].y;
     }
@@ -123,6 +155,7 @@ static CGFloat centerEdge = 300.0f;
     
     if ([sender state] == UIGestureRecognizerStateEnded) {
         [frontView setUserInteractionEnabled:NO];
+        [frontView setBackgroundColor:[UIColor clearColor]];
         
         CGFloat xPoints = 320.0f;
         CGFloat velocity = [sender velocityInView:self.view].x;
@@ -193,6 +226,24 @@ static CGFloat centerEdge = 300.0f;
     if ([segue.identifier isEqualToString:@"menu"]) {
         menuController = segue.destinationViewController;
         [menuController.tableView setDelegate:self];
+        
+        NSUInteger rowsCount = 0;
+        NSUInteger numberOfSections = [menuController.tableView numberOfSections];
+        for(NSUInteger i = 0 ; i <= numberOfSections-1 ; i++) {
+            NSUInteger numberOfRowsInSection = [menuController.tableView numberOfRowsInSection:i];
+            rowsCount = rowsCount + numberOfRowsInSection;
+            NSLog(@"COUNT: %i", rowsCount);
+        }
+        _viewControllersArray = [[NSMutableArray alloc] initWithCapacity:rowsCount];
+        for(NSUInteger i = 0 ; i <= numberOfSections-1 ; i++) {
+            NSUInteger numberOfRowInSection = [menuController.tableView numberOfRowsInSection:i];
+            for(NSUInteger j = 0 ; j <= numberOfRowInSection-1 ; j++) {
+                 NSMutableArray *array = [NSMutableArray array];
+                  [_viewControllersArray addObject:array];
+            }
+        }
+        
+        NSLog(@"viewControllersArray count: %i \n %@", _viewControllersArray.count, _viewControllersArray);
     }
 }
 

@@ -21,6 +21,9 @@
     DCNavigationController *containerController;
     DCTableViewController *menuController;
     
+    NSMutableArray *_viewControllersArray;
+    NSIndexPath *currentIndexPath;
+    
     CGFloat firstX;
 	CGFloat firstY;
     

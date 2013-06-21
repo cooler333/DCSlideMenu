@@ -10,6 +10,6 @@
 #import <UIKit/UIKit.h>
 
 
-@interface DCNavigationController : UINavigationController <UINavigationControllerDelegate>
+@interface DCNavigationController : UINavigationController
 
 @end

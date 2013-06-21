@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Dmitry Utmanov. All rights reserved.
 //
 
+
 #import <UIKit/UIKit.h>
 
-@interface DCTableViewController : UITableViewController {
-    NSMutableArray *dataArray;
-}
+
+@interface DCTableViewController : UITableViewController
 
 @end
