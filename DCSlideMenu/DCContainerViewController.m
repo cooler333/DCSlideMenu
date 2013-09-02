@@ -10,117 +10,16 @@
 #import "DCContainerViewController.h"
 
 
-static CGFloat rightEdge = 440.0f; // 440 - 160 = 280
-static CGFloat centerEdge = 300.0f;
+static CGFloat rightMenuEdge = 270.0f;
+static CGFloat centerEdge = 230.0f;
 
 
 @implementation DCContainerViewController
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self tableView:menuController.tableView didSelectRowAtIndexPath:indexPath];
-    [menuController.tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-    NSLog(@"DETAIL VIEW LOAD");
-}
+#pragma mark - Menu Gestures
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    NSLog(@"WILL SHOW: %@", viewController.navigationItem.title);
-}
-
-- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    NSLog(@"DID SHOW: %@", viewController.navigationItem.title);
-    
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSUInteger currentIndex = [self currentIndex:indexPath];
-    NSLog(@"didDeselectRowAtIndexPath currentIndex: %i", currentIndex);
-    [_viewControllersArray replaceObjectAtIndex:currentIndex withObject:[containerController viewControllers]];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"DCLOG SECTION: %i, ROW: %i", indexPath.section, indexPath.row);
-    
-    if (currentIndexPath != indexPath) {
-        //Back up current stack
-        NSUInteger row = [[_viewControllersArray objectAtIndex:[self currentIndex:indexPath]] count];
-        if (!row) {
-            [self initialViewControllers:indexPath];
-        }
-        NSArray *currentViewControllersArray = [_viewControllersArray objectAtIndex:[self currentIndex:indexPath]];
-        [containerController setViewControllers:currentViewControllersArray];
-        
-        currentIndexPath = indexPath;
-    }
-    UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:self action:@selector(toggleMenu:)];
-    [[[[containerController viewControllers] objectAtIndex:0] navigationItem] setLeftBarButtonItem:menuButton];
-    [self closeMenu];
-}
-
-- (NSUInteger)currentIndex:(NSIndexPath *)indexPath {
-    NSLog(@"INDEXPATH: %@", indexPath);
-    NSUInteger currentIndex = 0;
-    for(NSInteger i = 0 ; i <= indexPath.section-1 ; i++) {
-       NSUInteger numberOfRowInSection = [menuController.tableView numberOfRowsInSection:i];
-        currentIndex = currentIndex + numberOfRowInSection;;
-    }
-    currentIndex = currentIndex + indexPath.row;
-    NSLog(@"currentIndex: %i", currentIndex);
-
-    return currentIndex;
-}
-
-- (void)initialViewControllers:(NSIndexPath *)indexPath {
-    
-    UIViewController *viewController;
-    switch (indexPath.section) {
-        case 0: {
-            switch (indexPath.row) {
-                case 0: {
-                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"first"];
-                    break;
-                }
-                    
-                case 1: {
-                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"second"];
-                    break;
-                }
-                    
-                case 2: {
-                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"third"];
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-        }
-            
-        default: {
-            switch (indexPath.row) {
-                case 0: {
-                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"first"];
-                    break;
-                }
-                    
-                case 1: {
-                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"second"];
-                    break;
-                }
-                    
-                case 2: {
-                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"third"];
-                    break;
-                }
-                default:
-                    break;
-            }
-            break;
-        }
-    }
-    [[_viewControllersArray objectAtIndex:[self currentIndex:indexPath]] addObject:viewController];
+- (void)viewDidLoad {
+    [_menuController selectMenuSegmentAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(id)gestureRecognizer {
@@ -135,61 +34,93 @@ static CGFloat centerEdge = 300.0f;
 }
 
 - (IBAction)moving:(UIPanGestureRecognizer *)sender {
+    
     CGPoint translatedPoint = [sender translationInView:self.view];
-    if ([(UIPanGestureRecognizer*)sender state] == UIGestureRecognizerStateBegan) {
-        NSLog(@"BEGAN");
-        [frontView setUserInteractionEnabled:YES];
-        firstX = [containerView center].x;
-        firstY = [containerView center].y;
-    }
     
-    translatedPoint = CGPointMake(firstX+translatedPoint.x, firstY);
-    
-    if (translatedPoint.x < 160.0f) {
-        translatedPoint.x = 160.0f;
-    }
-        
-    [containerView setCenter:translatedPoint];
-    [frontView setCenter:translatedPoint];
-    
-    if ([sender state] == UIGestureRecognizerStateEnded) {
-        [frontView setUserInteractionEnabled:NO];
-        
-        CGFloat xPoints = 320.0f;
-        CGFloat velocity = [sender velocityInView:self.view].x;
-        NSLog(@"velocity: %.2f",velocity);
-        NSTimeInterval duration = xPoints / ABS(velocity);
-        NSLog(@"duration %.2f", duration);
-        if (duration > 0.5f) {
-            duration = 0.5f;
-        } else if (duration < 0.2f) {
-            duration = 0.2f;
-        } else {
-            NSLog(@"All Right");
+    switch ([sender state]) {
+        case UIGestureRecognizerStateBegan: {
+            NSLog(@"BEGAN");
+            [frontView setUserInteractionEnabled:YES];
+            [_containerController.view setUserInteractionEnabled:NO];
+            
+            firstX = [containerView center].x;
+            firstY = [containerView center].y;
+            break;
         }
-    
-        CGFloat finalX = translatedPoint.x + velocity;
-        CGFloat finalY = translatedPoint.y;
-        
-        if (finalX <= centerEdge) {
-            finalX = 160.0f;
-        } else if (finalX > centerEdge) {
-            finalX = rightEdge;
-        }
-        
-        [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
-            CGFloat relation = finalX/rightEdge;
-            NSLog(@"relation; %.1f",relation);
-            [containerView setCenter:CGPointMake(finalX, finalY)];
-            [frontView setCenter:CGPointMake(finalX, finalY)];
-        } completion:^(BOOL finished) {
-            if (finalX <= centerEdge) {
-                [frontView setUserInteractionEnabled:NO];
-            } else if (finalX > centerEdge) {
-                [frontView setUserInteractionEnabled:YES];
+            
+        case UIGestureRecognizerStateChanged: {
+            translatedPoint = CGPointMake(firstX+translatedPoint.x, firstY);
+            
+            if (translatedPoint.x < 160.0f) {
+                translatedPoint.x = 160.0f;
             }
-        }];
+            
+            [self.view layoutIfNeeded];
+            [containerConstraint setConstant:translatedPoint.x-160.0f];
+            [frontViewConstraint setConstant:translatedPoint.x-160.0f];
+            [UIView animateWithDuration:0.0f animations:^{
+                [self.view layoutIfNeeded];
+                [_containerController.view layoutIfNeeded];
+                [_menuController.view layoutIfNeeded];
+            }];
+            break;
+        }
+            
+        case UIGestureRecognizerStateEnded:  {
+            NSLog(@"END");
+            [frontView setUserInteractionEnabled:NO];
+            [_containerController.view setUserInteractionEnabled:YES];
+            
+            CGFloat xPoints = 320.0f;
+            CGFloat velocity = [sender velocityInView:self.view].x;
+            NSLog(@"velocity: %.2f",velocity);
+            NSTimeInterval duration = xPoints / ABS(velocity);
+            NSLog(@"duration %.2f", duration);
+            if (duration > 0.5f) {
+                duration = 0.5f;
+            } else if (duration < 0.2f) {
+                duration = 0.2f;
+            } else {
+                NSLog(@"All Right");
+            }
+            
+            CGFloat finalX = translatedPoint.x + velocity;
+            
+            if (finalX <= centerEdge) {
+                [containerConstraint setConstant:0];
+                [frontViewConstraint setConstant:0];
+            } else if (finalX > centerEdge) {
+                [containerConstraint setConstant:rightMenuEdge];
+                [frontViewConstraint setConstant:rightMenuEdge];
+                [containerView endEditing:YES];
+            }
+            
+            [UIView animateWithDuration:duration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
+                if (finalX <= centerEdge) {
+                    [_menuController.tableView deselectRowAtIndexPath:_menuController.currentIndexPath animated:YES];
+                } else if (finalX > centerEdge) {
+                    [_menuController.tableView selectRowAtIndexPath:_menuController.currentIndexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+                }
+                [self.view layoutIfNeeded];
+                [_containerController.view layoutIfNeeded];
+                [_menuController.view layoutIfNeeded];
+            } completion:^(BOOL finished) {
+                if (finalX <= centerEdge) {
+                    [frontView setUserInteractionEnabled:NO];
+                } else if (finalX > centerEdge) {
+                    [frontView setUserInteractionEnabled:YES];
+                }
+                [self.view layoutIfNeeded];
+                [_containerController.view layoutIfNeeded];
+                [_menuController.view layoutIfNeeded];
+            }];
+            break;
+        }
+            
+        default:
+            break;
     }
+    
 }
 
 - (IBAction)tapOnFrontView:(UITapGestureRecognizer *)sender {
@@ -197,59 +128,68 @@ static CGFloat centerEdge = 300.0f;
 }
 
 - (void)closeMenu {
+    [containerConstraint setConstant:0.0f];
+    [frontViewConstraint setConstant:0.0f];
+    
     [UIView animateWithDuration:0.4f delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
-        [containerView setCenter:CGPointMake(160, self.view.frame.size.height/2)];
-        [frontView setCenter:CGPointMake(160, self.view.frame.size.height/2)];
+        [_menuController.tableView deselectRowAtIndexPath:_menuController.currentIndexPath animated:YES];
+        [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         [frontView setUserInteractionEnabled:NO];
+        [_menuController.tableView reloadData];
     }];
 }
 
 - (void)openMenu {
+    [containerView endEditing:YES];
+    
+    [containerConstraint setConstant:rightMenuEdge];
+    [frontViewConstraint setConstant:rightMenuEdge];
+    
     [UIView animateWithDuration:0.4f delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^{
-        [containerView setCenter:CGPointMake(rightEdge, self.view.frame.size.height/2)];
-        [frontView setCenter:CGPointMake(rightEdge, self.view.frame.size.height/2)];
+        [_menuController.tableView selectRowAtIndexPath:_menuController.currentIndexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         [frontView setUserInteractionEnabled:YES];
+//        [_menuController.tableView reloadData];
     }];
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    NSLog(@"%@",segue.identifier);
-
-    if ([segue.identifier isEqualToString:@"content"]) {
-        containerController = segue.destinationViewController;
-        [containerController setDelegate:self];
-    }
-    if ([segue.identifier isEqualToString:@"menu"]) {
-        menuController = segue.destinationViewController;
-        [menuController.tableView setDelegate:self];
-        
-        NSUInteger rowsCount = 0;
-        NSUInteger numberOfSections = [menuController.tableView numberOfSections];
-        for(NSUInteger i = 0 ; i <= numberOfSections-1 ; i++) {
-            NSUInteger numberOfRowsInSection = [menuController.tableView numberOfRowsInSection:i];
-            rowsCount = rowsCount + numberOfRowsInSection;
-            NSLog(@"COUNT: %i", rowsCount);
-        }
-        _viewControllersArray = [[NSMutableArray alloc] initWithCapacity:rowsCount];
-        for(NSUInteger i = 0 ; i <= numberOfSections-1 ; i++) {
-            NSUInteger numberOfRowInSection = [menuController.tableView numberOfRowsInSection:i];
-            for(NSUInteger j = 0 ; j <= numberOfRowInSection-1 ; j++) {
-                 NSMutableArray *array = [NSMutableArray array];
-                  [_viewControllersArray addObject:array];
-            }
-        }
-        
-        NSLog(@"viewControllersArray count: %i \n %@", _viewControllersArray.count, _viewControllersArray);
-    }
-}
-
-- (void)toggleMenu:(id)sender {
+- (void)toggleMenu {
     if (containerView.center.x <= centerEdge) {
         [self openMenu];
     } else if (containerView.center.x > centerEdge) {
         [self closeMenu];
     }
 }
+
+#pragma mark - Private Methods
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    NSLog(@"%@",segue.identifier);
+    
+    if ([segue.identifier isEqualToString:@"content"]) {
+        self.containerController = segue.destinationViewController;
+        [self.containerController setDelegate:self];
+    }
+    if ([segue.identifier isEqualToString:@"menu"]) {
+        self.menuController = segue.destinationViewController;
+        [self.menuController setDelegate:self];
+    }
+}
+
+#pragma mark - Action Sheet Delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //LOGOUT ACTION
+    if (buttonIndex == 0) {
+        //Log out
+    }
+    else
+    {
+        //logout cancelled
+        //        [self selectMenuSegmentAtIndexPath:currentIndexPath];
+    }
+}
+
 @end

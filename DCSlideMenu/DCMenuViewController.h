@@ -10,6 +10,19 @@
 #import <UIKit/UIKit.h>
 
 
-@interface DCMenuViewController : UITableViewController
+@interface DCMenuViewController : UIViewController <UIActionSheetDelegate> {
+    
+    NSMutableArray *viewControllersArray;
+    
+}
+
+@property (strong, nonatomic) IBOutlet UITableView *tableView;
+
+@property NSIndexPath *currentIndexPath;
+
+@property id delegate;
+
+- (IBAction)logout:(id)sender;
+- (void)selectMenuSegmentAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

@@ -8,31 +8,32 @@
 
 
 #import <UIKit/UIKit.h>
-#import "DCNavigationController.h"
 #import "DCMenuViewController.h"
 
 
-@interface DCContainerViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDelegate, UINavigationControllerDelegate> {
+@interface DCContainerViewController : UIViewController <UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate, UIActionSheetDelegate> {
     
     __weak IBOutlet UIView *menuContainerView;
     __weak IBOutlet UIView *containerView;
     __weak IBOutlet UIView *frontView;
-    
-    DCNavigationController *containerController;
-    DCMenuViewController *menuController;
-    
-    NSMutableArray *_viewControllersArray;
-    NSIndexPath *currentIndexPath;
+    __weak IBOutlet NSLayoutConstraint *frontViewConstraint;
+    __weak IBOutlet NSLayoutConstraint *containerConstraint;
     
     CGFloat firstX;
 	CGFloat firstY;
     
 }
 
+@property UINavigationController *containerController;
+@property DCMenuViewController *menuController;
+
+//@property NSIndexPath *currentIndexPath;
+
+
 - (IBAction)moving:(UIPanGestureRecognizer *)sender;
 - (IBAction)tapOnFrontView:(UITapGestureRecognizer *)sender;
-
-- (void)toggleMenu:(id)sender;
-
+//- (void)selectMenuSegmentAtIndexPath:(NSIndexPath *)indexPath;
+- (void)toggleMenu;
+- (void)closeMenu;
 
 @end
