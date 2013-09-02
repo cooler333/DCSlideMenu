@@ -143,54 +143,11 @@
     }
 }
 
--  (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    switch (section) {
-        case 0:
-            return 3;
-            break;
-            
-        default:
-            return 1;
-            break;
-    }
-}
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell;
-    switch (indexPath.section) {
-        case 0:
-            switch (indexPath.row) {
-                case 0:
-                    cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell%i",indexPath.row]];
-                    break;
-                    
-                default: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell%i",indexPath.row]];
-                    break;
-                }
-            }
-            break;
-            
-        default:
-            switch (indexPath.row) {
-                case 0: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:@"cell3"];
-                    break;
-                }
-                    
-                default: {
-                    cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell%i",indexPath.row]];
-                    break;
-                }
-            }
-            break;
-    }
+    UITableViewCell * cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+    // Prepare Cell
     return cell;
 }
 
