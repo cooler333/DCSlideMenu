@@ -16,13 +16,9 @@
     
 }
 
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
-
 @property NSIndexPath *currentIndexPath;
-
 @property id customDelegate;
 
-- (IBAction)logout:(id)sender;
 - (void)selectMenuSegmentAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

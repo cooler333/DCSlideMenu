@@ -39,10 +39,6 @@
     [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
 }
 
-- (IBAction)logout:(id)sender {
-    [[[UIActionSheet alloc] initWithTitle:@"Are you sure you want to log out?" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Log out" otherButtonTitles:nil] showInView:self.view];
-}
-
 - (void)initialViewControllers:(NSIndexPath *)indexPath {
     
     UIViewController *viewController;
