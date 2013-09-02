@@ -151,7 +151,6 @@ static CGFloat centerEdge = 230.0f;
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         [frontView setUserInteractionEnabled:YES];
-//        [_menuController.tableView reloadData];
     }];
 }
 
@@ -174,21 +173,7 @@ static CGFloat centerEdge = 230.0f;
     }
     if ([segue.identifier isEqualToString:@"menu"]) {
         self.menuController = segue.destinationViewController;
-        [self.menuController setDelegate:self];
-    }
-}
-
-#pragma mark - Action Sheet Delegate
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    //LOGOUT ACTION
-    if (buttonIndex == 0) {
-        //Log out
-    }
-    else
-    {
-        //logout cancelled
-        //        [self selectMenuSegmentAtIndexPath:currentIndexPath];
+        [self.menuController setCustomDelegate:self];
     }
 }
 

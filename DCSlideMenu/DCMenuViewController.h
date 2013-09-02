@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface DCMenuViewController : UIViewController <UIActionSheetDelegate> {
+@interface DCMenuViewController : UITableViewController <UIActionSheetDelegate> {
     
     NSMutableArray *viewControllersArray;
     
@@ -20,7 +20,7 @@
 
 @property NSIndexPath *currentIndexPath;
 
-@property id delegate;
+@property id customDelegate;
 
 - (IBAction)logout:(id)sender;
 - (void)selectMenuSegmentAtIndexPath:(NSIndexPath *)indexPath;

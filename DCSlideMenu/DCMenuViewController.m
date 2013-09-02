@@ -59,7 +59,7 @@
                     break;
                 }
                 default:
-                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"second"];
+                    viewController = [self.storyboard instantiateViewControllerWithIdentifier:@"third"];
                     break;
             }
             break;
@@ -93,7 +93,7 @@
 #pragma mark - Table view data source
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    DCContainerViewController *controller = self.delegate;
+    DCContainerViewController *controller = self.customDelegate;
     NSUInteger currentIndex = [self currentIndex:indexPath];
     NSLog(@"didDeselectRowAtIndexPath currentIndex: %i", currentIndex);
     [viewControllersArray replaceObjectAtIndex:currentIndex withObject:[controller.containerController viewControllers]];
@@ -112,32 +112,34 @@
                 [self initialViewControllers:indexPath];
             }
             NSArray *currentViewControllersArray = [viewControllersArray objectAtIndex:[self currentIndex:indexPath]];
-            DCContainerViewController *controller = self.delegate;
+            DCContainerViewController *controller = self.customDelegate;
             [controller.containerController setViewControllers:currentViewControllersArray];
             
             self.currentIndexPath = indexPath;
         }
-        DCContainerViewController *controller = self.delegate;
+        DCContainerViewController *controller = self.customDelegate;
         [controller.view layoutIfNeeded];
         UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithTitle:@"menu" style:UIBarButtonItemStyleBordered target:self action:@selector(toggleMenu)];
         [[[[controller.containerController viewControllers] objectAtIndex:0] navigationItem] setLeftBarButtonItem:menuButton];
         [controller.view layoutIfNeeded];
-        [self.delegate closeMenu];
+        [self.customDelegate closeMenu];
     }
 }
 
 - (void)toggleMenu {
-    [self.delegate toggleMenu];
+    [self.customDelegate toggleMenu];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 0;
-    }
-    else
-    {
-        return 44.0;
+    switch (section) {
+        case 0:
+            return 0.0;
+            break;
+            
+        default:
+            return 44.0;
+            break;
     }
 }
 
@@ -160,14 +162,41 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell%i",indexPath.row]];
+    UITableViewCell *cell;
+    switch (indexPath.section) {
+        case 0:
+            switch (indexPath.row) {
+                case 0:
+                    cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell%i",indexPath.row]];
+                    break;
+                    
+                default: {
+                    cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell%i",indexPath.row]];
+                    break;
+                }
+            }
+            break;
+            
+        default:
+            switch (indexPath.row) {
+                case 0: {
+                    cell = [tableView dequeueReusableCellWithIdentifier:@"cell3"];
+                    break;
+                }
+                    
+                default: {
+                    cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell%i",indexPath.row]];
+                    break;
+                }
+            }
+            break;
+    }
     return cell;
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
-        //Log out
         NSLog(@"Log Out");
     }
     else
